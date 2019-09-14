@@ -35,6 +35,8 @@ canvas.addEventListener("mousedown", function(){
   }
 });
 
+//holi
+
 canvas.addEventListener("mousemove", function(){
   if(movimiento && clickeado){
     moverPol(event.layerX, event.layerY);
