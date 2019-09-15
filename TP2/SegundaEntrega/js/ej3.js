@@ -2,55 +2,88 @@ var ctx = document.getElementById("canvas").getContext("2d");
 let arrCirc = [];
 let arrPoligon = [];
 let contadorPol = 0;
+let cantCirculos = 0;
 let contador = 0;
 let movimiento = false;
 let clickeado = false;
 let polActivo = 0;
-canvas.addEventListener("click", verPos);
+let puntoActivo = 0;
+let esPunto = false;
 
 function verPos(){
-  var rect = canvas.getBoundingClientRect();
-  let ejeX = event.clientX - rect.left;
-  let ejeY = event.clientY - rect.top;
+  let ejeX = event.layerX;
+  let ejeY = event.layerY;
   if (contadorPol>0) {
-    console.log(estaAdentro(ejeX, ejeY).entro);
+    console.log(estaEnUnPunto(ejeX, ejeY).i);
     if(estaAdentro(ejeX, ejeY).entro){
       clickeado = true;
-      polActivo = estaAdentro(ejeX, ejeY).i
+      polActivo = estaAdentro(ejeX, ejeY).i;
+    }else if(estaEnUnPunto(ejeX, ejeY).entro){
+      clickeado = true;
+      esPunto = true;
+      console.log("entro punto");
+      console.log(arrPoligon[contadorPol-1].puntos[0].posY);
+      console.log(arrPoligon[contadorPol-1].puntos[1].posY);
+      console.log(arrPoligon[contadorPol-1].puntos[2].posY);
+      puntoActivo = estaEnUnPunto(ejeX, ejeY).i;
     }else {
       if(!movimiento || !clickeado){
-        crearcirculo(rect, ejeX, ejeY);
+        // crearcirculo(ejeX, ejeY);
       }
     }
   }else{
     if(!movimiento || !clickeado){
-      crearcirculo(rect, ejeX, ejeY);
+      crearcirculo(ejeX, ejeY);
     }
   }
 }
 
 canvas.addEventListener("mousedown", function(){
+  verPos();
   if(clickeado){
     movimiento = true;
   }
 });
 
-//holi
-
 canvas.addEventListener("mousemove", function(){
-  if(movimiento && clickeado){
-    moverPol(event.layerX, event.layerY);
-  }
+if(movimiento && clickeado && esPunto){
+  moverPunto(event.layerX, event.layerY);
+}else if(movimiento && clickeado){
+  moverPol(event.layerX, event.layerY);
+}
 });
 
+function moverPunto(pX, pY){
+
+
+  arrPoligon[contadorPol-1].puntos[puntoActivo].posX = pX;
+  arrPoligon[contadorPol-1].puntos[puntoActivo].posY = pY;
+  arrPoligon[contadorPol-1].centroX = recalcularCentro().centroX;
+  arrPoligon[contadorPol-1].centroY = recalcularCentro().centroY;
+  dibujarPol();
+}
+
+function recalcularCentro(){
+  let posicionX = 0;
+  let posicionY = 0;
+  for (var i = 0; i < arrPoligon[contadorPol-1].puntos.length; i++) {
+    posicionX = posicionX + arrPoligon[contadorPol-1].puntos[i].posX;
+    posicionY = posicionY + arrPoligon[contadorPol-1].puntos[i].posY;
+  }
+  let centroX = posicionX / arrPoligon[contadorPol-1].puntos.length;
+  let centroY = posicionY / arrPoligon[contadorPol-1].puntos.length;
+
+  return {centroX, centroY};
+}
+
 function moverPol(X, Y){
-  console.log(polActivo);
+  // console.log(polActivo);
   let auxiX = arrPoligon[polActivo].centroX;
   let auxiY = arrPoligon[polActivo].centroY;
   arrPoligon[polActivo].centroX = X;
   arrPoligon[polActivo].centroY = Y;
   for (var i = 0; i < arrPoligon[polActivo].cantidadDePuntos; i++) {
-      console.log("i " + i + " pol " +  polActivo);
+      // console.log("i " + i + " pol " +  polActivo);
       arrPoligon[polActivo].puntos[i].posX = arrPoligon[polActivo].puntos[i].posX - (auxiX - X);
       arrPoligon[polActivo].puntos[i].posY = arrPoligon[polActivo].puntos[i].posY - (auxiY - Y);
   }
@@ -61,22 +94,12 @@ canvas.addEventListener("mouseup", function(){
   if(clickeado && movimiento){
     movimiento = false;
     clickeado = false;
+    esPunto = false;
+    puntoActivo = 0;
     polActivo = 0;
     dibujarPol();
   }
 })
-
-
-function getMousePos(){
-  var rect = canvas.getBoundingClientRect(),
-      scaleX = canvas.width / rect.width,
-      scaleY = canvas.height / rect.height;
-
-  return {
-    x: (event.clientX - rect.left) * scaleX,   // scale mouse coordinates after they have
-    y: (event.clientY - rect.top) * scaleY     // been adjusted to be relative to element
-  }
-}
 
 function dibujarPol(){
   limpiar();
@@ -84,10 +107,9 @@ function dibujarPol(){
   let y = 0;
   let desX = 0;
   let desY = 0;
-  for (var i = 0; i < contadorPol; i++) {
+  for (var i = 0; i < arrPoligon.length; i++) {
     for (var j = 0; j < arrPoligon[i].cantidadDePuntos; j++) {
-      ctx.beginPath();
-      ctx.arc(arrPoligon[i].puntos[j].posX, arrPoligon[i].puntos[j].posY, 10 ,0, 2*Math.PI);
+      redibujarCirculos(arrPoligon[i].puntos[j].posX, arrPoligon[i].puntos[j].posY, arrPoligon[i].puntos[j].radio, arrPoligon[i].puntos[j].color);
       ctx.strokeStyle = arrPoligon[i].puntos[j].color;
       if(j+1 < arrPoligon[polActivo].cantidadDePuntos){
         x = arrPoligon[i].puntos[j].posX;
@@ -102,13 +124,25 @@ function dibujarPol(){
         desY = arrPoligon[i].puntos[0].posY;
         dibujarLineas(x, y, desX, desY);
       }
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(arrPoligon[i].centroX, arrPoligon[i].centroY, 7 ,0, 2*Math.PI);
-      ctx.strokeStyle = '#00ff00';
-      ctx.stroke();
+      dibujarCentro(arrPoligon[i].centroX, arrPoligon[i].centroY);
     }
   }
+}
+
+function redibujarCirculos(X, Y, radio, color){
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.arc(X, Y, radio, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.closePath();
+}
+
+function dibujarCentro(X, Y){
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(X, Y, 7 ,0, 2*Math.PI);
+  ctx.strokeStyle = '#00ff00';
+  ctx.stroke();
 }
 
 function dibujarLineas(x, y, desX, desY){
@@ -130,10 +164,7 @@ function estaAdentro(ejeX, ejeY){
   let entro = false;
   for (var i = 0; i < contadorPol; i++) {
     for (var j = 0; j <arrPoligon[i].puntos.length ; j++) {
-      console.log("centro: " + centroX);
       if(ejeX > arrPoligon[i].centroX-25 && ejeX < arrPoligon[i].centroX+25 && ejeY > arrPoligon[i].centroY-25 && ejeY < arrPoligon[i].centroY+25 ) {
-        console.log("entro en " + i);
-
         entro = true;
         return {entro, i};
       }
@@ -141,49 +172,54 @@ function estaAdentro(ejeX, ejeY){
   }
   return false;
 }
-function crearcirculo(rect, ejeX, ejeY){
-  // var rect = canvas.getBoundingClientRect();
-  // let ejeX = event.clientX - rect.left;
-  // let ejeY = event.clientY - rect.top;
+
+function estaEnUnPunto(ejeX, ejeY){
+  let entro = false;
+  for (var i = 0; i < arrPoligon[contadorPol-1].puntos.length; i++) {
+    if(ejeX > arrPoligon[contadorPol-1].puntos[i].posX - 25 && ejeX < arrPoligon[contadorPol-1].puntos[i].posX + 25 && ejeY > arrPoligon[contadorPol-1].puntos[i].posY - 25 && ejeY < arrPoligon[contadorPol-1].puntos[i].posY + 25){
+      entro = true;
+      return {entro, i};
+    }
+  }
+  return false;
+}
+
+function crearcirculo(ejeX, ejeY){
   let color = document.getElementById('colorPicker').value;
   let circulo = new Circulo(ejeX, ejeY, 10, color);
   arrCirc[contador] = circulo;
   contador++;
   dibujar();
-
 }
 
-function Circulo(ejeX, ejeY, rad, col){
-  this.posX = ejeX;
-  this.posY = ejeY;
-  this.radio = rad;
-  this.color = col;
+class Circulo{
+  constructor(ejeX, ejeY, rad, col){
+    this.posX = ejeX;
+    this.posY = ejeY;
+    this.radio = rad;
+    this.color = col;
+
+  }
 }
 
-function Poligono(cX, cY){
-  this.puntos = arrCirc;
-  this.cantidadDePuntos = contador;
-  this.centroX = cX;
-  this.centroY = cY;
-    // for (var j = 0; j < contador; j++) {
-    //   poligono[j] = arrCirc[j];
-    // }
-
-    // console.log(arrPoligon[contadorPol][0].posX)
-    // if(contadorPol ==1){
-    //
-    //   console.log(arrPoligon[1][0].posX);
-    // }
-
+class Poligono{
+  constructor(cX, cY){
+    this.puntos = arrCirc;
+    this.cantidadDePuntos = contador;
+    this.centroX = cX;
+    this.centroY = cY;
+  }
 }
+
 function dibujar(){
     ctx.beginPath();
     ctx.arc(arrCirc[contador-1].posX, arrCirc[contador-1].posY, arrCirc[contador-1].radio ,0, 2*Math.PI);
-    ctx.strokeStyle = arrCirc[contador-1].color;
+    ctx.fillStyle = arrCirc[contador-1].color;
     if(contador>1){
       ctx.moveTo(arrCirc[contador-2].posX, arrCirc[contador-2].posY)
       ctx.lineTo(arrCirc[contador-1].posX, arrCirc[contador-1].posY);
     }
+    ctx.fill();
     ctx.stroke();
 }
 
@@ -197,7 +233,6 @@ function CerrarPoligono(){
   ctx.stroke();
   calcularCentro();
 }
-
 
 function limpiar(){
   for (var i = 0; i < contador; i++) {
@@ -216,16 +251,20 @@ function calcularCentro(){
   }
   let centroX = posicionX / contador-1;
   let centroY = posicionY / contador-1;
-  console.log("calcular centro: " + centroX);
+  // console.log("calcular centro: " + centroX);
   ctx.beginPath();
   ctx.arc(centroX, centroY, 7 ,0, 2*Math.PI);
   ctx.strokeStyle = '#00ff00';
   ctx.stroke();
   arrPoligon[contadorPol] = new Poligono(centroX, centroY);
   // console.log("contador 1:" + contador);
-  // console.log(contadorPol);
-  console.log(arrPoligon[contadorPol]);
+  // console.log("contador pol " + contadorPol);
+
+  // console.log(arrPoligon[0]);
+  // if(contadorPol>0){
+  //   console.log(arrPoligon[1]);
+  // }
   contadorPol++;
   contador = 0;
-  // console.log("contador 2: " + contador);
+  // console.log("contador: " + contador);
 }
