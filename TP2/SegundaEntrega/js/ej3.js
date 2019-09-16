@@ -1,5 +1,5 @@
 //Tengo algo de estrucura para el 10 (arrPoligon, contador, etc), pero no pude hacerlo
-//funcionar aproiadamente asi que restingi la funcion.
+//funcionar apropiadamente asi que restringí la funcion.
 //si des-comentan las lineas 314 a 317 se puede ver que pisa las coordenadas del primer
 //poligono con las del segundo (en caso de hacer 2 poligonos)
 //linea 37 descomentar
