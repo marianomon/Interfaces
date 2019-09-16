@@ -1,0 +1,115 @@
+.bienvenida{
+  text-align: center;
+  margin-top: 40px;
+}
+.bienvenidaIndex{
+  text-align: center;
+  margin-top: 80px;
+  text-shadow: 1px 1px #000000;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 30px;
+}
+
+.ejercicios{
+  text-align: left;
+  margin-top: 40px;
+  margin-bottom: 60px;
+}
+
+.boton{
+  margin-left: 50px;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  background-color: rgb(63, 40, 255);
+  border: none;
+  border-radius: 5px;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.inputNumero{
+  width: 80px;
+  border: 1px solid blue;
+  border-radius: 2px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+
+.tituloEj{
+  text-align: right;
+}
+
+.bienvenidaIndex h5{
+  margin-top: 50px;
+  font-size: 40px;
+}
+
+.bienvenidoTitulo{
+  text-decoration-line: underline;
+  font-size: 70px;
+}
+
+.bienvenidoSubtitulo{
+  font-size: 50px;
+}
+
+.bg-color{
+  background-color: rgb(167, 198, 255);
+}
+
+.row{
+  background-color: rgb(90, 179, 191);
+}
+
+html{
+  background-color: rgb(90, 179, 191);
+}
+.bg-nav{
+  background-color: rgb(130, 143, 147);
+}
+
+.colorPick{
+    border: none;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.zona-img{
+  text-align: center;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.config{
+  text-align: center;
+}
+
+.tabla{
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  overflow: auto;
+  height: auto;
+  width: auto;
+}
+
+.centrarTabla{
+  margin: 0 auto;
+}
+.cuerpo{
+  background-color: rgb(90, 179, 191);
+  margin-top: 20px;
+  margin-left: 30px;
+  margin-bottom: 40px;
+}
+
+.tablas{
+  margin-left: 200px;
+  padding-bottom: 100%;
+}
