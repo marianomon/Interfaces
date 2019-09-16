@@ -1,13 +1,8 @@
-//Tengo algo de estrucura para el 10 (arrPoligon, contador, etc), pero no pude hacerlo
-//funcionar apropiadamente asi que restringí la funcion.
-//si des-comentan las lineas 314 a 317 se puede ver que pisa las coordenadas del primer
-//poligono con las del segundo (en caso de hacer 2 poligonos)
-//linea 37 descomentar
-
 var ctx = document.getElementById("canvas").getContext("2d");
 let arrCirc = [];
 let arrPoligon = [];
 let contadorPol = 0;
+let cantCirculos = 0;
 let contador = 0;
 let movimiento = false;
 let clickeado = false;
@@ -21,6 +16,9 @@ function recargar(){
   arrCirc = [];
   arrPoligon = [];
   contadorPol = 0;
+  contador = 0;
+  polActivo = 0;
+  puntoActivo = 0;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
@@ -34,10 +32,11 @@ function verPos(){
     }else if(estaEnUnPunto(ejeX, ejeY).entro){
       clickeado = true;
       esPunto = true;
-      puntoActivo = estaEnUnPunto(ejeX, ejeY).i;
+      puntoActivo = estaEnUnPunto(ejeX, ejeY).j;
+      polActivo =  estaEnUnPunto(ejeX, ejeY).i;
     }else {
       if(!movimiento || !clickeado){
-        // crearcirculo(ejeX, ejeY);
+         crearcirculo(ejeX, ejeY);
       }
     }
   }else{
@@ -49,19 +48,21 @@ function verPos(){
 
 canvas.addEventListener("dblclick", function () {
         if (estaEnUnPunto(event.layerX, event.layerY).entro) {
-            if (arrPoligon[contadorPol-1].puntos.length > 3) {
-                eliminarpunto(estaEnUnPunto(event.layerX, event.layerY).i);
+            if (arrPoligon[estaEnUnPunto(event.layerX, event.layerY).i].puntos.length > 3) {
+              polActivo = estaEnUnPunto(event.layerX, event.layerY).i;
+              puntoActivo = estaEnUnPunto(event.layerX, event.layerY).j;
+              eliminarpunto();
             } else {
                 alert("El punto que desea eliminar no pertenece a un poligono de mas de 3 lados");
             }
         }
 });
 
-function eliminarpunto(i){
-  delete arrPoligon[contadorPol-1].puntos[i];
-  arrPoligon[contadorPol-1].puntos.splice(i, 1);
-  arrPoligon[contadorPol-1].centroX = recalcularCentro().centroX;
-  arrPoligon[contadorPol-1].centroY = recalcularCentro().centroY;
+function eliminarpunto(){
+  delete arrPoligon[polActivo].puntos[puntoActivo];
+  arrPoligon[polActivo].puntos.splice(puntoActivo, 1);
+  arrPoligon[polActivo].centroX = recalcularCentro().centroX;
+  arrPoligon[polActivo].centroY = recalcularCentro().centroY;
   dibujarPol();
 }
 
@@ -85,16 +86,20 @@ document.body.onkeyup = function(event){
     }
 };
 
+
 function cambiarColor(e){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (let i = 0; i < arrPoligon[contadorPol-1].puntos.length; i++) {
+    for (var i = 0; i < arrPoligon.length; i++) {
+      for (let j = 0; j < arrPoligon[i].puntos.length; j++) {
         if ((e.deltaY < 0) && ((colorAuxiliar >= 0)&&((colorAuxiliar <255)))) {
             colorAuxiliar++;
         }
         if ((e.deltaY > 0) && ((colorAuxiliar > 0)&&((colorAuxiliar <=255)))){
             colorAuxiliar--;
         }
-        arrPoligon[contadorPol-1].puntos[i].color = rgbToHex(colorAuxiliar, 0, 0);
+
+        arrPoligon[i].puntos[j].color = rgbToHex(colorAuxiliar, 0, 0);
+      }
     }
     dibujarPol();
 }
@@ -115,33 +120,34 @@ if(movimiento && clickeado && esPunto){
 });
 
 function moverPunto(pX, pY){
-  arrPoligon[contadorPol-1].puntos[puntoActivo].posX = pX;
-  arrPoligon[contadorPol-1].puntos[puntoActivo].posY = pY;
-  arrPoligon[contadorPol-1].centroX = recalcularCentro().centroX;
-  arrPoligon[contadorPol-1].centroY = recalcularCentro().centroY;
+  arrPoligon[polActivo].puntos[puntoActivo].posX = pX;
+  arrPoligon[polActivo].puntos[puntoActivo].posY = pY;
+  arrPoligon[polActivo].centroX = recalcularCentro().centroX;
+  arrPoligon[polActivo].centroY = recalcularCentro().centroY;
   dibujarPol();
 }
 
 function recalcularCentro(){
   let posicionX = 0;
   let posicionY = 0;
-  for (var i = 0; i < arrPoligon[contadorPol-1].puntos.length; i++) {
-    posicionX = posicionX + arrPoligon[contadorPol-1].puntos[i].posX;
-    posicionY = posicionY + arrPoligon[contadorPol-1].puntos[i].posY;
+  for (var i = 0; i < arrPoligon[polActivo].puntos.length; i++) {
+    posicionX = posicionX + arrPoligon[polActivo].puntos[i].posX;
+    posicionY = posicionY + arrPoligon[polActivo].puntos[i].posY;
   }
-  let centroX = posicionX / arrPoligon[contadorPol-1].puntos.length;
-  let centroY = posicionY / arrPoligon[contadorPol-1].puntos.length;
+  let centroX = posicionX / arrPoligon[polActivo].puntos.length;
+  let centroY = posicionY / arrPoligon[polActivo].puntos.length;
+
   return {centroX, centroY};
 }
 
-function moverPol(X, Y){
+function moverPol(x, y){
   let auxiX = arrPoligon[polActivo].centroX;
   let auxiY = arrPoligon[polActivo].centroY;
-  arrPoligon[polActivo].centroX = X;
-  arrPoligon[polActivo].centroY = Y;
+  arrPoligon[polActivo].centroX = x;
+  arrPoligon[polActivo].centroY = y;
   for (var i = 0; i < arrPoligon[polActivo].puntos.length; i++) {
-      arrPoligon[polActivo].puntos[i].posX = arrPoligon[polActivo].puntos[i].posX - (auxiX - X);
-      arrPoligon[polActivo].puntos[i].posY = arrPoligon[polActivo].puntos[i].posY - (auxiY - Y);
+      arrPoligon[polActivo].puntos[i].posX = arrPoligon[polActivo].puntos[i].posX - (auxiX - x);
+      arrPoligon[polActivo].puntos[i].posY = arrPoligon[polActivo].puntos[i].posY - (auxiY - y);
   }
   dibujarPol();
 }
@@ -167,12 +173,12 @@ function dibujarPol(){
     for (var j = 0; j < arrPoligon[i].puntos.length; j++) {
       redibujarCirculos(arrPoligon[i].puntos[j].posX, arrPoligon[i].puntos[j].posY, arrPoligon[i].puntos[j].radio, arrPoligon[i].puntos[j].color);
       ctx.strokeStyle = arrPoligon[i].puntos[j].color;
-      if(j+1 < arrPoligon[polActivo].puntos.length){
+      if(j+1 < arrPoligon[i].puntos.length){
         x = arrPoligon[i].puntos[j].posX;
         y = arrPoligon[i].puntos[j].posY;
         desX = arrPoligon[i].puntos[j+1].posX;
         desY = arrPoligon[i].puntos[j+1].posY;
-        dibujarLineas(x, y, desX, desY, arrPoligon[i].puntos[j].color);
+        dibujarLineas(x, y, desX, desY);
       }else{
         x = arrPoligon[i].puntos[j].posX;
         y = arrPoligon[i].puntos[j].posY;
@@ -185,10 +191,10 @@ function dibujarPol(){
   }
 }
 
-function redibujarCirculos(X, Y, radio, color){
+function redibujarCirculos(x, y, radio, color){
   ctx.fillStyle = color;
   ctx.beginPath();
-  ctx.arc(X, Y, radio, 0, Math.PI * 2);
+  ctx.arc(x, y, radio, 0, Math.PI * 2);
   ctx.fill();
   ctx.closePath();
 }
@@ -213,39 +219,41 @@ function limpiar(){
 }
 
 function estaAdentro(ejeX, ejeY){
-  let posicionX = 0;
-  let posicionY = 0;
-  let centroX = 0;
-  let centroY = 0;
   let entro = false;
-  for (var i = 0; i < contadorPol; i++) {
-    for (var j = 0; j <arrPoligon[i].puntos.length ; j++) {
-      if(ejeX > arrPoligon[i].centroX-25 && ejeX < arrPoligon[i].centroX+25 && ejeY > arrPoligon[i].centroY-25 && ejeY < arrPoligon[i].centroY+25 ) {
+  for (var i = 0; i < arrPoligon.length; i++) {
+      if(ejeX > arrPoligon[i].centroX-25 && ejeX < arrPoligon[i].centroX+25 && ejeY > arrPoligon[i].centroY-25 && ejeY < arrPoligon[i].centroY+25 ){
         entro = true;
         return {entro, i};
       }
-    }
   }
   return false;
 }
 
 function estaEnUnPunto(ejeX, ejeY){
   let entro = false;
-  for (var i = 0; i < arrPoligon[contadorPol-1].puntos.length; i++) {
-    if(ejeX > arrPoligon[contadorPol-1].puntos[i].posX - 25 && ejeX < arrPoligon[contadorPol-1].puntos[i].posX + 25 && ejeY > arrPoligon[contadorPol-1].puntos[i].posY - 25 && ejeY < arrPoligon[contadorPol-1].puntos[i].posY + 25){
-      entro = true;
-      return {entro, i};
+  for (var i = 0; i < arrPoligon.length; i++) {
+    for (var j = 0; j < arrPoligon[i].puntos.length; j++) {
+      if(ejeX > arrPoligon[i].puntos[j].posX - 25 && ejeX < arrPoligon[i].puntos[j].posX + 25 && ejeY > arrPoligon[i].puntos[j].posY - 25 && ejeY < arrPoligon[i].puntos[j].posY + 25){
+        entro = true;
+        return {entro, i, j};
+      }
     }
   }
+
   return false;
 }
 
 function crearcirculo(ejeX, ejeY){
-  let color = document.getElementById('colorPicker').value;
-  let circulo = new Circulo(ejeX, ejeY, 10, color);
-  arrCirc[contador] = circulo;
-  contador++;
-  dibujar();
+  if (!movimiento) {
+    let color = document.getElementById('colorPicker').value;
+    let circulo = new Circulo(ejeX, ejeY, 10, color);
+    arrCirc[contador] = circulo;
+    contador++;
+    dibujar();
+  }else{
+    movimiento = false;
+  }
+
 }
 
 class Circulo{
@@ -254,6 +262,7 @@ class Circulo{
     this.posY = ejeY;
     this.radio = rad;
     this.color = col;
+
   }
 }
 
@@ -264,6 +273,12 @@ class Poligono{
     this.centroY = cY;
   }
 }
+
+// ctx.fillStyle = color;
+// ctx.beginPath();
+// ctx.arc(X, Y, radio, 0, Math.PI * 2);
+// ctx.fill();
+// ctx.closePath();
 
 function dibujar(){
     ctx.beginPath();
@@ -309,16 +324,9 @@ function calcularCentro(){
   ctx.strokeStyle = '#00ff00';
   ctx.stroke();
   arrPoligon[contadorPol] = new Poligono(centroX, centroY);
-  // console.log("contador 1:" + contador);
-  // console.log("contador pol " + contadorPol);
-
-  // console.log(arrPoligon[0]);
-  // if(contadorPol>0){
-  //   console.log(arrPoligon[1]);
-  // }
+  arrCirc = [];
   contadorPol++;
   contador = 0;
-  // console.log("contador: " + contador);
 }
 
 function hexToRgb(hex) {
