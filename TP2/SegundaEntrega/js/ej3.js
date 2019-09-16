@@ -1,12 +1,13 @@
 //Tengo algo de estrucura para el 10 (arrPoligon, contador, etc), pero no pude hacerlo
 //funcionar aproiadamente asi que restingi la funcion.
+//si des-comentan las lineas 314 a 317 se puede ver que pisa las coordenadas del primer
+//poligono con las del segundo (en caso de hacer 2 poligonos)
 //linea 37 descomentar
 
 var ctx = document.getElementById("canvas").getContext("2d");
 let arrCirc = [];
 let arrPoligon = [];
 let contadorPol = 0;
-let cantCirculos = 0;
 let contador = 0;
 let movimiento = false;
 let clickeado = false;
@@ -15,6 +16,13 @@ let puntoActivo = 0;
 let esPunto = false;
 let verificar = false;
 let colorAuxiliar = 255;
+
+function recargar(){
+  arrCirc = [];
+  arrPoligon = [];
+  contadorPol = 0;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
 
 function verPos(){
   let ejeX = event.layerX;
@@ -77,7 +85,6 @@ document.body.onkeyup = function(event){
     }
 };
 
-
 function cambiarColor(e){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (let i = 0; i < arrPoligon[contadorPol-1].puntos.length; i++) {
@@ -124,18 +131,15 @@ function recalcularCentro(){
   }
   let centroX = posicionX / arrPoligon[contadorPol-1].puntos.length;
   let centroY = posicionY / arrPoligon[contadorPol-1].puntos.length;
-
   return {centroX, centroY};
 }
 
 function moverPol(X, Y){
-  // console.log(polActivo);
   let auxiX = arrPoligon[polActivo].centroX;
   let auxiY = arrPoligon[polActivo].centroY;
   arrPoligon[polActivo].centroX = X;
   arrPoligon[polActivo].centroY = Y;
   for (var i = 0; i < arrPoligon[polActivo].puntos.length; i++) {
-      // console.log("i " + i + " pol " +  polActivo);
       arrPoligon[polActivo].puntos[i].posX = arrPoligon[polActivo].puntos[i].posX - (auxiX - X);
       arrPoligon[polActivo].puntos[i].posY = arrPoligon[polActivo].puntos[i].posY - (auxiY - Y);
   }
@@ -250,7 +254,6 @@ class Circulo{
     this.posY = ejeY;
     this.radio = rad;
     this.color = col;
-
   }
 }
 
@@ -261,12 +264,6 @@ class Poligono{
     this.centroY = cY;
   }
 }
-
-// ctx.fillStyle = color;
-// ctx.beginPath();
-// ctx.arc(X, Y, radio, 0, Math.PI * 2);
-// ctx.fill();
-// ctx.closePath();
 
 function dibujar(){
     ctx.beginPath();
@@ -307,7 +304,6 @@ function calcularCentro(){
   }
   let centroX = posicionX / contador-1;
   let centroY = posicionY / contador-1;
-  // console.log("calcular centro: " + centroX);
   ctx.beginPath();
   ctx.arc(centroX, centroY, 7 ,0, 2*Math.PI);
   ctx.strokeStyle = '#00ff00';
