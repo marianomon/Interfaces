@@ -20,17 +20,12 @@ function verPos(){
   let ejeX = event.layerX;
   let ejeY = event.layerY;
   if (contadorPol>0) {
-    console.log(estaEnUnPunto(ejeX, ejeY).i);
     if(estaAdentro(ejeX, ejeY).entro){
       clickeado = true;
       polActivo = estaAdentro(ejeX, ejeY).i;
     }else if(estaEnUnPunto(ejeX, ejeY).entro){
       clickeado = true;
       esPunto = true;
-      console.log("entro punto");
-      console.log(arrPoligon[contadorPol-1].puntos[0].posY);
-      console.log(arrPoligon[contadorPol-1].puntos[1].posY);
-      console.log(arrPoligon[contadorPol-1].puntos[2].posY);
       puntoActivo = estaEnUnPunto(ejeX, ejeY).i;
     }else {
       if(!movimiento || !clickeado){
@@ -47,9 +42,7 @@ function verPos(){
 canvas.addEventListener("dblclick", function () {
         if (estaEnUnPunto(event.layerX, event.layerY).entro) {
             if (arrPoligon[contadorPol-1].puntos.length > 3) {
-              // console.log("elimina3 " + arrPoligon[contadorPol-1].puntos[0].color);
                 eliminarpunto(estaEnUnPunto(event.layerX, event.layerY).i);
-
             } else {
                 alert("El punto que desea eliminar no pertenece a un poligono de mas de 3 lados");
             }
@@ -66,23 +59,23 @@ function eliminarpunto(i){
 
 document.body.onkeydown = function(event){
   var teclaChar = String.fromCharCode(event.keyCode);
-  console.log(teclaChar);
     if (teclaChar == "C" || teclaChar == "c"){
         verificar = true;
-        console.log(arrPoligon[0]);
         canvas.addEventListener("wheel", function(event) {
-          console.log(verificar);
             if (verificar){
                 event.preventDefault();
                 cambiarColor(event);
             }
-        }, false);
+        });
     }
 };
 
-document.getElementById('canvas').addEventListener("keyup",function(){
-    verificar = false;
-});
+document.body.onkeyup = function(event){
+  var teclaChar = String.fromCharCode(event.keyCode);
+    if (teclaChar == "C" || teclaChar == "c"){
+      verificar = false;
+    }
+};
 
 
 function cambiarColor(e){
@@ -94,7 +87,7 @@ function cambiarColor(e){
         if ((e.deltaY > 0) && ((colorAuxiliar > 0)&&((colorAuxiliar <=255)))){
             colorAuxiliar--;
         }
-        arrPoligon[contadorPol-1].puntos[i].color = rgbToHex(colorAuxiliar, colorAuxiliar, 0);
+        arrPoligon[contadorPol-1].puntos[i].color = rgbToHex(colorAuxiliar, 0, 0);
     }
     dibujarPol();
 }
