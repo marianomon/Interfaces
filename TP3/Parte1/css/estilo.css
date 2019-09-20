@@ -1,6 +1,7 @@
 .bienvenida{
   text-align: center;
   margin-top: 40px;
+  margin-bottom: 50px;
 }
 .bienvenidaIndex{
   text-align: center;
@@ -8,35 +9,6 @@
   text-shadow: 1px 1px #000000;
   font-family: "Times New Roman", Times, serif;
   font-size: 30px;
-}
-
-.ejercicios{
-  text-align: left;
-  margin-top: 40px;
-  margin-bottom: 60px;
-}
-
-.boton{
-  margin-left: 50px;
-  margin-top: 40px;
-  margin-bottom: 20px;
-  background-color: rgb(63, 40, 255);
-  border: none;
-  border-radius: 5px;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-}
-
-.inputNumero{
-  width: 80px;
-  border: 1px solid blue;
-  border-radius: 2px;
-  color: white;
-  background-color: rgba(0, 0, 0, 0);
 }
 
 
@@ -73,43 +45,207 @@ html{
   background-color: rgb(130, 143, 147);
 }
 
-.colorPick{
-    border: none;
-    background-color: rgba(0, 0, 0, 0);
+
+.contenedor-botones{
+  position: absolute;
+  left: 15%;
+}
+.bt1{
+  position: relative;
+  display: block;
+  font-size: 0px;
+  font-family: "montserrat";
+  text-decoration: none;
+  transition: .5s;
+  margin-top: 10%;
+  margin-bottom: 20%;
+  text-align: center;
+  padding-top: 12px;
+  background-color: #2d3436;
+  width: 30px;
+  height: 30px;
+  text-transform: uppercase;
 }
 
-.zona-img{
-  text-align: center;
-  margin-top: 40px;
-  margin-bottom: 40px;
+.bt1:hover{
+  font-family: "montserrat";
+  text-decoration: none;
+  transition: .5s;
+  border: 4px solid #ff7576;
+  background-color: ;
+  width: 140px;
+  height: 70px;
+  font-size: 25px;
+  color: #ff7576;
 }
 
-.config{
-  text-align: center;
+.bt2{
+  text-decoration: none;
+  padding-top: 50px;
+  margin-bottom: 30%;
+  position: relative;
+  font-size: 0px;
+  display: block;
+  width: 40px;
+  height: 40px;
+  transition: 1s;
+  background-color: #cc0099;
 }
 
-.tabla{
+.bt2:hover{
+  text-decoration: none;
+  font-size: 40px;
   text-align: center;
+  width: 400px;
+  height: 200px;
+  background-color: #00580f;
+  transform: rotate(360deg);
+}
+
+.contenedor-animacion{
+  width: 100%;
+  height: 1000px;
+}
+
+.trump{
+  position: absolute;
+  width: 100px;
+  height: 88px;
+  background: url('img/trump_run.png') left center;
+  animation: play 0.5s steps(6) infinite;
+}
+
+@keyframes play {
+  100%{background-position: -600px;}
+}
+.contenedor-reloj{
+  background-color: blue;
+  width: 50%;
+  height: 400px;
+  margin-bottom: 100px;
+}
+
+.reloj{
+  position: absolute;
+  margin-left: 450px;
+  margin-top: 50px;
+  width: 300px;
+  height: 300px;
+  border-radius: 300px;
+  background-color: white;
+}
+
+.segundero{
+  position: relative;
+  left: 150px;
   margin-top: 20px;
-  margin-bottom: 20px;
-  margin-left: 20px;
-  margin-right: 20px;
-  overflow: auto;
-  height: auto;
-  width: auto;
+  height: 130px;
+  width: 2px;
+  background-color: red;
+  transform-origin: 50% 100%;
+  animation: linear;
+  animation-duration: 60s;
+  animation-iteration-count: infinite;
+  animation-name: segundero;
 }
 
-.centrarTabla{
-  margin: 0 auto;
+@keyframes segundero {
+    100%{
+      transform: rotate(360deg);
+    }
 }
-.cuerpo{
-  background-color: rgb(90, 179, 191);
+
+.hora{
+  position: relative;
+  left: 150px;
+  top: -180px;
+  height: 80px;
+  width: 9px;
+  background-color: black;
+  border: 1px white;
+  transform-origin: 50% 100%;
+  animation: linear;
+  animation-duration: 43200s;
+  animation-iteration-count: infinite;
+  animation-name: segundero;
+}
+
+.minutero{
+  position: relative;
+  left: 150px;
+  top: -100px;
+  height: 100px;
+  width: 6px;
+  border: 1px white;
+  background-color: black;
+  transform-origin: 50% 100%;
+  animation: linear;
+  animation-duration: 3600s;
+  animation-iteration-count: infinite;
+  animation-name: segundero;
+}
+.contenedor-figura{
+  background-color: blue;
+  width: 50%;
+  height: 400px;
+  margin-bottom: 100px;
+}
+
+.figura{
+  margin-left: 34%;
+  margin-top: 10%;
+  position: absolute;
+  background-color: red;
+  width: 25%;
+  height: 100px;
+}
+
+.jump{
+  transition: 3s;
+  transform: translate(150px);
+}
+
+.rotate{
+  transition: 2s;
+  transform: rotate(180deg);
+}
+
+.trans{
+  transition: 3s;
+  transform: scale(3);
+}
+
+.contenedor-texto{
+  margin-left: 40px;
   margin-top: 20px;
-  margin-left: 30px;
-  margin-bottom: 40px;
+  margin-bottom: 50px;
+  position: absolute;
+}
+.cuerpo-texto{
+  transition: 1s ease;
+  padding: 30px;
+  position: relative;
+  border: 2px solid #2d3436;
+  overflow: hidden;
 }
 
-.tablas{
-  margin-left: 200px;
-  padding-bottom: 100%;
+.cuerpo-texto h5{
+  color: #ff7576;
+  font-family: "montserrat";
+  text-align: justify;
+  overflow: hidden;
+  animation: text 2s 1;
+}
+
+.cuerpo-texto:hover{
+  transition: .5s ease;
+  background-color: #2d3436;
+}
+
+@keyframes text {
+  0%{
+    transform: translateY(-80%);
+  }50%{
+    transform: translateY(8%);
+  }
 }
