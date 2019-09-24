@@ -119,10 +119,48 @@ html{
   100%{background-position: -600px;}
 }
 .contenedor-reloj{
-  background-color: blue;
   width: 50%;
   height: 400px;
   margin-bottom: 100px;
+}
+
+.docehs::after{
+  left: 135px;
+  content: "12";
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  font-size: 30px;
+}
+
+.treshs::after{
+  left: 275px;
+  top: 120px;
+  content: "3";
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  font-size: 30px;
+}
+
+.seishs::after{
+  left: 145px;
+  top: 250px;
+  content: "6";
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  font-size: 30px;
+}
+
+.nuevehs::after{
+  left: 10px;
+  top: 122px;
+  content: "9";
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  font-size: 30px;
 }
 
 .reloj{
@@ -185,7 +223,6 @@ html{
   animation-name: segundero;
 }
 .contenedor-figura{
-  background-color: blue;
   width: 50%;
   height: 400px;
   margin-bottom: 100px;
@@ -195,9 +232,16 @@ html{
   margin-left: 34%;
   margin-top: 10%;
   position: absolute;
-  background-color: red;
+  background-color: #787878;
   width: 25%;
   height: 100px;
+  font-size: 55px;
+  text-align: center;
+  color: #5bc166;
+}
+
+.figura::after{
+  content:"Clickeame!";
 }
 
 .jump{

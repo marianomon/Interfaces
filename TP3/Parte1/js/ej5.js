@@ -5,7 +5,6 @@ window.onload = function() {
     let y = event.clientY;
     x = x-300;
     y = y -300;
-    console.log(x + "px" + y + "px");
     trump.style.left = x + 'px';
     trump.style.top = y + "px";
   });
