@@ -61,6 +61,14 @@ html{
   width: 100%;
   height: 132px;
   background: url('img/suelo.png');
+}
+
+.suelo-play{
+  position: absolute;
+  top: 480px;
+  width: 100%;
+  height: 132px;
+  background: url('img/suelo.png');
   animation: playsuelo 3s linear infinite;
 }
 
@@ -68,19 +76,19 @@ html{
   100%{background-position: -1024px;}
 }
 
-.obstaculo{
-  background-size: cover;
-  position: absolute;
-  transform: translate(-100%, -50%);
-  width: calc(870px / 10);
-  height: 29px;
-  background: url(img/obstaculo_auto.png);
-  /* animation: fuegoX 0.5s steps(8) infinite,
-             fuegoY 0.5s steps(4) infinite; */
 
+.explosion{
+  position: absolute;
+  width: 64px;
+  height: 128px;
+  left: 3%;
+  top: 73%;
+  background: url(img/fire.png);
+  animation: expX 0.3s steps(8) infinite,
+             expY 1.2s steps(4) infinite;
 }
 
-@keyframes fuegoX {
+@keyframes expX {
   from{
     background-position-x: 0px
   }
@@ -89,32 +97,79 @@ html{
   }
 }
 
-@keyframes fuegoY {
+@keyframes expY {
   from{
     background-position-y: 0px
   }
-  to{
+  to {
     background-position-y: -512px
   }
+}
+
+.obstaculo{
+  background-size: cover;
+  position: absolute;
+  left: 80%;
+  transform: translate(0%, -50%);
+  width: calc(870px / 10);
+  height: 29px;
+  background: url(img/obstaculo_auto.png);
 }
 
 .obstaculo-container{
   position: absolute;
   width: 100%;
   top: 93%;
+}
+
+.obstaculo-play{
+  left: 80%;
+  background-size: cover;
+  position: absolute;
+  width: 100%;
+  top: 93%;
   animation: moverObst 2s linear infinite;
+}
+
+.obstaculo-play-medio{
+  position: absolute;
+  width: 100%;
+  top: 93%;
+  animation: moverObstMedioAlto 1.7s linear infinite;
+}
+
+.obstaculo-play-dificil{
+  position: absolute;
+  width: 100%;
+  top: 93%;
+  animation: moverObst 1.4s linear infinite;
+}
+
+@keyframes moverObstMedioAlto {
+  from {
+    left: 20%;
+  }
+  to {
+    left: -100%;
+  }
 }
 
 @keyframes moverObst {
   from {
-    left: 100%;
+    left: 20%;
   }
   to {
-    left: 0%;
+    left: -100%;
   }
 }
 
 .moneda-container {
+  position: absolute;
+  width: 100%;
+  top: 30%;
+}
+
+.moneda-container-play{
   position: absolute;
   width: 100%;
   top: 30%;
@@ -123,10 +178,10 @@ html{
 
 @keyframes moverMoneda {
   from {
-    left: 100%;
+    left: 30%;
   }
   to {
-    left: 0%;
+    left: -80%;
   }
 }
 
@@ -134,11 +189,12 @@ html{
   background-size: cover;
   position: absolute;
   top: 200px;
+  left: 80%;
   transform: translate(-100%, -50%);
-  width: calc(700px / 10);
+  width: calc(751px / 10);
   height: 70px;
-  background: url(img/coin-sprite-animation.png) ;
-  animation: rotar 0.6s steps(10) infinite;
+  background: url(img/moneda-animation.png) ;
+  animation: rotar 0.6s steps(6) infinite;
 
 }
 
@@ -147,41 +203,19 @@ html{
     background-position-x: 0;
   }
   to {
-    background-position-x: -700px;
-  }
-}
-
-.explosion{
-  width: 64px;
-  height: 64px;
-  position: absolute;
-  top: 83%;
-  left: 5%;
-  /* background: url(img/explosion.png); */
-  animation: expX 0.5s steps(5) infinite,
-             expY 1s steps(5) infinite;
-  animation-play-state: paused;
-}
-
-@keyframes expX {
-  from{
-    background-position-x: 0px
-  }
-  to{
-    background-position-x: -320px
-  }
-}
-
-@keyframes expY {
-  from{
-    background-position-y: 0px
-  }
-  to {
-    background-position-y: -320px
+    background-position-x: -451px;
   }
 }
 
 .cielo{
+  position: absolute;
+  top: 130px;
+  width: 100%;
+  height: 226px;
+  background: url('img/cielo.png');
+}
+
+.cielo-play{
   position: absolute;
   top: 130px;
   width: 100%;
@@ -196,6 +230,14 @@ html{
 
 
 .edificios{
+  position: absolute;
+  top: 230px;
+  width: 100%;
+  height: 251px;
+  background: url('img/edificio.png');
+}
+
+.edificios_play{
   position: absolute;
   top: 230px;
   width: 100%;
@@ -220,34 +262,76 @@ html{
   top: 6%;
 }
 
+.startView{
+  padding: 147px;
+  padding-left: 514px;
+  padding-right: 463px;
+  background-color: rgba(255, 214, 253, 0.42);
+  margin-top: 1%;
+  position: absolute;
+}
+
+.spacebar{
+  margin-left: -30px;
+  margin-top: 20px;
+  animation: spacebar 0.8s alternate infinite;
+}
+
+@keyframes spacebar {
+  from{
+    transform: scale(0.8);
+  }
+  to{
+    transform: scale(1);
+  }
+}
+
+.boton{
+  width: 120px;
+  height: 50px;
+}
+
 .hidden {
   display: none;
 }
 
-
-
-.trump{
-  animation-play-state:
-  left: 10%;
-  top: 400px;
+.trump-container{
   position: absolute;
-  width: 100px;
+  width: 100%;
+  top: 81%;
+}
+.trump{
+  position: absolute;
+  width: calc(900px / 10);
+  height: 88px;
+  background: url('img/trump_run.png') left center;
+}
+
+.trump-run{
+  position: absolute;
+  width: calc(900px / 10);
   height: 88px;
   background: url('img/trump_run.png') left center;
   animation: run 0.5s steps(6) infinite;
 }
 
+.trump-jump{
+  position: absolute;
+  width: calc(900px / 10);
+  height: 88px;
+  background: url('img/trump_run.png') left center;
+  transition-timing-function: cubic-bezier(.35,1.08,.72,1);
+  animation: jump 0.8s;
+}
+
 @keyframes run {
-100%{background-position: -600px;}
+100%{
+      background-position: -600px;
+    }
 }
 
 @keyframes jump{
   50%{
-    transform: translateY(-100px);
+    transform: translateY(-120px);
   }
-}
-
-.containerbtn{
-  margin-top: 3%;
-  margin-left: 15%;
 }

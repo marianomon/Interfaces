@@ -20,10 +20,11 @@
   document.addEventListener("DOMContentLoaded", start);
 
 function run(){
-  trump.style.animation = "run 0.5s steps(6) infinite";
+  trump.className = "trump-run";
 }
 
 function start() {
+    explosion.className = "hidden";
     let btnPlay = document.getElementById("play");
     let btnExit = document.getElementById("exit");
     btnExit.addEventListener("click", function(){
@@ -33,15 +34,17 @@ function start() {
 }
 
 function correrAnimaciones(){
-  trump.style.animationPlayState = "running";
-  cielo.style.animationPlayState = "running";
-  edificios.style.animationPlayState = "running";
-  suelo.style.animationPlayState = "running";
-  mon_container.style.animationPlayState = "running";
-  obst_container.style.animationPlayState = "running";
+  trump.className = "trump-run";
+  cielo.className = "cielo-play";
+  edificios.className = "edificios_play";
+  suelo.className = "suelo-play";
+  mon_container.className = "moneda-container-play";
+  obst_container.className = "obstaculo-play";
 }
 
 function startGame() {
+  explosion.className = "hidden";
+  run();
   document.getElementById("play").firstChild.data = "Restart";
   correrAnimaciones();
   detectarColision();
@@ -77,14 +80,12 @@ function finishGame() {
 function handleKeyDown(e) {
   var teclaChar = event.code;
     if (teclaChar == "Space"){
-        trump.style.animation = "jump 0.8s";
-        setTimeout(run, 650);
-
+        trump.className = "trump-jump";
+        trump.addEventListener("animationend", run);
     }
 }
 
 function detectarColision(){
-    setTimeout( () => {
         let pos_a =
             {   t: trump.getBoundingClientRect().top,
                 l: trump.getBoundingClientRect().left,
@@ -110,52 +111,54 @@ function detectarColision(){
         }else if(pos_a.l <= pos_c.r && pos_a.r >= pos_c.l && pos_a.b >= pos_c.t && pos_a.t <= pos_c.b){
               colision_muerte();
         }
-    }, 300);
     intervalo = requestAnimationFrame(detectarColision)
 }
 
 function playSound(sonido) {
-  if(sonido == 1){
     let audio = {};
     audio["bien"] = new Audio();
     audio["bien"].src = "js/sonido/coin.mp3";
     audio["bien"].play();
-  }else if(sonido == 2){
-    let audio = {};
-    audio["mal"] = new Audio();
-    audio["mal"].src = "js/sonido/explosion.mp3";
-    audio["mal"].play();
-  }
+
 }
 
 function colision_moneda() {
-    playSound(1);
+    playSound();
     coins += 1;
     timer = timer + 5;
-    console.log(coins);
+    console.log("monedas: " + coins);
     moneda.className = "hidden";
     setTimeout( () => {
         moneda.className = "moneda";
     }, 900);
-    if(coins%10 == 0){
-      obst_container.style.animation = "moverObst " + velocidad +"s linear infinite";
-      velocidad -= 0.3;
+    if(coins > 2 && coins <= 4){
+        console.log("dif media");
+        obst_container.className = "obstaculo-play-medio";
+    }
+    if (coins > 4) {
+      console.log("dif alta");
+      obst_container.className = "obstaculo-play-dificil";
     }
 }
 
+function detener_animaciones(){
+  trump.className = "trump";
+  cielo.className = "cielo";
+  edificios.className = "edificios";
+  suelo.className = "suelo";
+  mon_container.className = "moneda-container";
+  obst_container.className = "obstaculo-container";
+}
+
 function colision_muerte(){
-  playSound(2);
-  trump.style.animationPlayState = "paused";
-  cielo.style.animationPlayState = "paused";
-  edificios.style.animationPlayState = "paused";
-  suelo.style.animationPlayState = "paused";
-  mon_container.style.animationPlayState = "paused";
-  obst_container.style.animationPlayState = "paused";
-  explosion.style.background = "url('css/img/explosion.png')";
-  explosion.style.animationPlayState = "running";
+  trump.className = "trump";
+  cielo.className = "cielo";
+  edificios.className = "edificios";
+  suelo.className = "suelo";
+  mon_container.className = "moneda-container";
+  obst_container.className = "obstaculo-container";
+  explosion.className = "explosion";
+  // mostrar cartel perder
   finishGame();
-  setTimeout( () =>{
-    explosion.style.background = "";
-    explosion.style.animationPlayState = "paused";
-  }, 1000);
+  detener_animaciones();
 }
