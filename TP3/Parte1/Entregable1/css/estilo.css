@@ -41,6 +41,8 @@
 
 html{
   background-color: rgb(90, 179, 191);
+  background-size: 100% 100%;
+  border: 1px solid black;
   z-index: -40;
 }
 .bg-nav{

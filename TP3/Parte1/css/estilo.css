@@ -40,6 +40,7 @@
 
 html{
   background-color: rgb(90, 179, 191);
+  background-size: 100% 100%;
 }
 .bg-nav{
   background-color: rgb(130, 143, 147);
@@ -181,16 +182,9 @@ html{
   width: 2px;
   background-color: red;
   transform-origin: 50% 100%;
-  animation: linear;
+  /* animation: linear;
   animation-duration: 60s;
-  animation-iteration-count: infinite;
-  animation-name: segundero;
-}
-
-@keyframes segundero {
-    100%{
-      transform: rotate(360deg);
-    }
+  animation-iteration-count: infinite; */
 }
 
 .hora{
@@ -202,10 +196,19 @@ html{
   background-color: black;
   border: 1px white;
   transform-origin: 50% 100%;
-  animation: linear;
+  /* animation: linear;
   animation-duration: 43200s;
-  animation-iteration-count: infinite;
-  animation-name: segundero;
+  animation-iteration-count: infinite; */
+}
+
+.centro{
+  width: 20px;
+  height: 20px;
+  border-radius: 40px;
+  background-color: black;
+  top: 48%;
+  left: 48%;
+  position: absolute;
 }
 
 .minutero{
@@ -217,10 +220,9 @@ html{
   border: 1px white;
   background-color: black;
   transform-origin: 50% 100%;
-  animation: linear;
+  /* animation: linear;
   animation-duration: 3600s;
-  animation-iteration-count: infinite;
-  animation-name: segundero;
+  animation-iteration-count: infinite; */
 }
 .contenedor-figura{
   width: 50%;
